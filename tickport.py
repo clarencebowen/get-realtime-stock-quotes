@@ -23,7 +23,8 @@ cur = conn.cursor(cursor_factory=DictCursor)
 
 extended_hour_price_change = extended_hour_last_price = extended_hour_price_change_pct = extended_hour_is_price_change_non_negative = extended_hour_mode = symbol = localized_last_update_date =  recent_price = ticker_mid = price_change = last_price = price_change_pct = is_price_change_non_negative = None
 
-tickers = {'TSLA':'/m/0ckhqlx', 'AAPL':'/m/07zmbvf', 'AMZN':'/m/07zl90k', 'GOOG':'/g/1q4t94b6p', 'FB':'/m/0rz9htl', 'BABA':'/g/1q6b4f1pf'}
+tickers = {'TSLA':'/m/0ckhqlx', 'AAPL':'/m/07zmbvf', 'AMZN':'/m/07zl90k', 'GOOG':'/g/1q4t94b6p', 'FB':'/m/0rz9htl', 
+'BABA':'/g/1q6b4f1pf', 'LNKD':'/m/0gmkq6j', 'TWTR':'/g/1ydpvdm0w'}
 
 symbols = input("Please enter your symbol or list of comma-delimited symbols:").upper() #eg. TSLA,AAPL
 
