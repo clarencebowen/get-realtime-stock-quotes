@@ -84,7 +84,7 @@ try:
 
 			'''
 			# optional code to write to file
-			with open("stockquotes.txt", "a") as sq:
+			with open("intraday_stockquotes_{}.txt".format(datetime.utcnow().strftime("%Y%m%d")), "a") as sq:
 				sq.write("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\n".format(	symbol,
 													last_price,
 													price_change,
