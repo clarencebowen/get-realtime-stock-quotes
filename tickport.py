@@ -81,7 +81,27 @@ try:
 			# insert_dt timestamp default now()
 			# );
 			###
-			
+
+			'''
+			# optional code to write to file
+			with open("stockquotes.txt", "a") as sq:
+				sq.write("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\n".format(	symbol,
+													last_price,
+													price_change,
+													price_change_pct,
+													is_price_change_non_negative,
+													extended_hour_mode, 
+													extended_hour_last_price, 
+													extended_hour_price_change,
+													extended_hour_price_change_pct,
+													extended_hour_is_price_change_non_negative,
+													localized_last_update_date,
+													ticker_mid,
+													datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+												)
+						)
+			'''
+
 			cur.execute("""
 			INSERT INTO ticker_price_info(
 			symbol,
