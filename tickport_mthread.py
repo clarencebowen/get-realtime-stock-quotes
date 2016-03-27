@@ -178,7 +178,7 @@ thread_num = 1
 thread_set = set()
 
 try:
-	while True and time() < end_time:
+	while time() < end_time:
 		for ticker_mid_val in (tickers[sym] for sym in ticker_list if sym in tickers): #for ticker_mid_val in tickers.values():
 
 			# skip thread creation if already exists
