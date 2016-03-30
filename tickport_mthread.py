@@ -6,6 +6,7 @@ from psycopg2.extras import DictCursor
 from time import sleep
 from time import time
 import threading
+import sys
 
 # get real-time ticker price data
 # Author: Clarence Bowen
@@ -26,14 +27,14 @@ cur = conn.cursor(cursor_factory=DictCursor)
 '''
 
 class Worker (threading.Thread):
-	def __init__(self, threadID, name, ticker_mid_val, delay):
+	def __init__(self, threadID, name, ticker, ticker_mid_val, delay):
 		threading.Thread.__init__(self)
 		self.threadID = threadID
 		self.name = name
 		self.delay = delay
 		self.ticker_mid_val = ticker_mid_val
 	def run(self):
-		print ("Starting " + self.name)
+		print ("Running",self.name,"for",ticker)
 		get_stock_quote(self.ticker_mid_val, self.delay)
 
 def get_stock_quote(ticker_mid_val, sleep_delay):
@@ -140,11 +141,23 @@ def get_stock_quote(ticker_mid_val, sleep_delay):
 		sleep(sleep_delay)
 
 tickers = {'TSLA':'/m/0ckhqlx', 'AAPL':'/m/07zmbvf', 'AMZN':'/m/07zl90k', 'GOOG':'/g/1q4t94b6p', 'FB':'/m/0rz9htl', 
-'BABA':'/g/1q6b4f1pf', 'LNKD':'/m/0gmkq6j', 'TWTR':'/g/1ydpvdm0w', 'SCTY':'/g/11x19sc6q'}
+'BABA':'/g/1q6b4f1pf', 'LNKD':'/m/0gmkq6j', 'TWTR':'/g/1ydpvdm0w', 'SCTY':'/g/11x19sc6q', 'GRPN':'/m/0rzpy45',
+'YELP':'/g/1hbvw6nn_'}
 
 symbols = input("Please enter your symbol or list of comma-delimited symbols:").upper() #eg. TSLA,AAPL
 
-ticker_list = symbols.replace (' ', '').split(',')
+user_ticker_list = symbols.replace (' ', '').split(',')
+ticker_list = []
+
+for sym in user_ticker_list:
+	if sym not in tickers:
+		print(sym, "doesn't exist in pre-defined list of symbols, Skipping...")
+		continue
+	ticker_list.append(sym)
+
+if not ticker_list:
+	print("Symbols requested do not exist in pre-defined list. Exiting script...")
+	sys.exit(-1)
 
 try:
 	user_sleep_delay = int(input("Please enter time delay (seconds):")) #eg. 5
@@ -157,7 +170,7 @@ else:
 		print ("{} second(s) is too high or too low. Delay set to {} second(s) ".format(user_sleep_delay,sleep_delay))
 	else:
 		sleep_delay = user_sleep_delay
-		
+
 try:
 	user_duration = int(input("Please enter how long program should run for (minutes):")) #eg. 60
 except ValueError:
@@ -172,14 +185,14 @@ else:
 
 end_time = program_duration * 60 + time()
 
-print("Running...press [^C] or equivalent to cancel\n")
+print("\nRunning program...press [^C] or equivalent to cancel\n")
 
 thread_num = 1
 thread_set = set()
 
 try:
 	while time() < end_time:
-		for ticker_mid_val in (tickers[sym] for sym in ticker_list if sym in tickers): #for ticker_mid_val in tickers.values():
+		for ticker,ticker_mid_val in ((sym,tickers[sym]) for sym in ticker_list if sym in tickers): #for ticker_mid_val in tickers.values():
 
 			# skip thread creation if already exists
 			if "thread_{}".format(ticker_mid_val) in thread_set:
@@ -188,7 +201,7 @@ try:
 				thread_set.add("thread_{}".format(ticker_mid_val))
 
 			# Create new thread
-			sub_thread = Worker(thread_num, "thread_{}".format(ticker_mid_val), ticker_mid_val, sleep_delay)
+			sub_thread = Worker(thread_num, "thread_{}".format(ticker_mid_val), ticker, ticker_mid_val, sleep_delay)
 
 			# set thread to daemon thread so that terminating main (non-daemon) thread automatically kills all non-daemon threads
 			if sub_thread.isDaemon() is False:
