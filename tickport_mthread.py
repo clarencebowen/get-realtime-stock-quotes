@@ -49,7 +49,7 @@ def get_stock_quote(ticker_mid_val, sleep_delay):
 			extended_hour_mode = price_info["extended_hour_mode"]
 			ticker_mid = price_info["ticker_mid"]
 
-			last_update_dt = price_info["localized_last_update_date"].split()
+			last_update_dt = price_info["localized_last_update_date"].replace(",","").replace("EDT","").replace("EST","").strip().split()
 			last_update_dt.insert(2,str(datetime.now().year))
 			last_update_dt = ' '.join(last_update_dt)
 			localized_last_update_date = datetime.strptime(last_update_dt, '%b %d %Y %I:%M %p')
