@@ -146,7 +146,7 @@ tickers = {'TSLA':'/m/0ckhqlx', 'AAPL':'/m/07zmbvf', 'AMZN':'/m/07zl90k', 'GOOG'
 
 symbols = input("Please enter your symbol or list of comma-delimited symbols:").upper() #eg. TSLA,AAPL
 
-user_ticker_list = symbols.replace (' ', '').split(',')
+user_ticker_list = list(set(symbols.replace (' ', '').split(',')))
 ticker_list = []
 
 for sym in user_ticker_list:
