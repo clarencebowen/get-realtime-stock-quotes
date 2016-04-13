@@ -104,7 +104,17 @@ def get_quote_eod_snapshot(symbol = 'AAPL', days_ago = 0):
 		conn.commit()
 
 if __name__ == '__main__':
-	ticker = input("Please enter your symbol:") #eg. TSLA
-	days_ago = int(input("Please enter how far back (in calendar days) to fetch quotes:")) #eg. 4000
+	ticker = input("Please enter your symbol:").upper().replace (' ', '') #eg. TSLA
+
+	try:
+		days_ago = int(input("Please enter how far back (in calendar days) to fetch quotes:")) #eg. 4000
+	except ValueError:
+		days_ago = 4000
+		print ("Invalid calendar days input. Calendar days set to {}".format(days_ago))
+	else:
+		if days_ago < 0:
+			user_days_ago = days_ago
+			days_ago = 4000
+			print ("{} days input is too high or too low. Days set to {}".format(user_days_ago,days_ago))
 
 	get_quote_eod_snapshot(ticker, days_ago)
